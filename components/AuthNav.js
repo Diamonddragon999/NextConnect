@@ -17,7 +17,7 @@ const AuthNav = ({ user }) => {
 
 				<button
 					onClick={() => logOut(router)}
-					className='bg-[#835905] text-gray-50 py-2 px-6 rounded hover:bg-red-500'
+					className='bg-blue-600 text-gray-50 py-2 px-6 rounded hover:bg-red-500'
 				>
 					Sign out
 				</button>

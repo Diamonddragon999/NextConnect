@@ -34,7 +34,7 @@ const ShareEventModal = ({ event, closeModal }) => {
 				</div>
 
 				<MdCancel
-					className='text-4xl text-[#C07F00] cursor-pointer hover:text-[#b59a42] top-3 absolute right-4'
+					className='text-4xl text-blue-600 cursor-pointer hover:text-[#b59a42] top-3 absolute right-4'
 					onClick={closeModal}
 				/>
 			</div>

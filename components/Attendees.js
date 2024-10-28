@@ -66,7 +66,7 @@ const Attendees = ({
 					<button
 						className={`p-4 ${
 							click && "hidden"
-						} text-white rounded-md bg-[#C07F00]`}
+						} text-white rounded-md bg-blue-600`}
 						onClick={() => setDisableRegModal(true)}
 					>
 						Disable Registration

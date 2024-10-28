@@ -9,7 +9,7 @@ const NoEvent = () => {
 			<Image src={party} alt='Create an event' width={300} />
 			<h3 className='my-4 text-center'>You have no existing event tickets.</h3>
 			<Link href='create/event'>
-				<button className='bg-[#FFD95A] px-6 py-4 rounded'>
+				<button className='bg-blue-600 px-6 py-4 rounded text-white'>
 					Create an event ticket
 				</button>
 			</Link>

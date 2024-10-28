@@ -72,7 +72,7 @@ const event = () => {
 						<div className='flex items-center justify-between mb-6'>
 							<h2 className='text-2xl font-bold '>Create a new event</h2>
 							<Link href='/dashboard'>
-								<MdCancel className='text-4xl text-[#C07F00] cursor-pointer' />
+								<MdCancel className='text-4xl text-blue-600 cursor-pointer' />
 							</Link>
 						</div>
 
@@ -171,7 +171,7 @@ const event = () => {
 							{buttonClicked ? (
 								<Loading title='May take longer time for image uploads' />
 							) : (
-								<button className='p-4 bg-[#C07F00] w-[200px] mt-3 text-white rounded-md'>
+								<button className='p-4 bg-blue-600 w-[200px] mt-3 text-white rounded-md'>
 									Create Event
 								</button>
 							)}

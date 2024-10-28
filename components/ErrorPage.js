@@ -17,10 +17,10 @@ const ErrorPage = () => {
 			</Head>
 			<main className='w-full h-[100vh] flex flex-col space-y-4 items-center justify-center'>
 				<Image src={fourfour} alt='404 page' className='w-[400px] mb-8' />
-				<h2 className='text-xl text-[#C07F00]'>Seems we lost you! 😪</h2>
+				<h2 className='text-xl text-blue-600'>Seems we lost you! 😪</h2>
 				<Link
 					href='/'
-					className='p-4 bg-slate-100 shadow-md hover:bg-[#C07F00] hover:text-slate-100 rounded-md'
+					className='p-4 bg-slate-100 shadow-md hover:bg-blue-600 hover:text-slate-100 rounded-md'
 				>
 					Come back home 🏠
 				</Link>

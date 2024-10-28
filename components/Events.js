@@ -32,7 +32,7 @@ const Events = ({ events }) => {
 						<p className='opacity-50'>Venue: {event.venue}</p>
 					</div>
 
-					<div className='w-full py-6 bg-[#C07F00] rounded-b-2xl flex items-center px-4 justify-between'>
+					<div className='w-full py-6 bg-blue-600 rounded-b-2xl flex items-center px-4 justify-between'>
 						<MdDelete
 							className='text-gray-200 text-2xl cursor-pointer'
 							onClick={() => deleteTicket(event.$id)}

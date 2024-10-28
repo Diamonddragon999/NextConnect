@@ -97,7 +97,7 @@ const RegisterPage = ({ event }) => {
 						</div>
 						<button
 							type='submit'
-							className='bg-[#FFD95A] p-3 font-medium hover:bg-[#C07F00] hover:text-[#FFF8DE] mb-3 rounded-md'
+							className='bg-blue-600 p-3 font-medium hover:bg-blue-600 hover:text-[#FFF8DE] text-white mb-3 rounded-md'
 						>
 							GET TICKET
 						</button>
@@ -121,7 +121,7 @@ const RegisterPage = ({ event }) => {
 								Check your email for your ticket and event information.
 							</p>
 							<button
-								className='px-4 py-2 bg-[#FFD95A] rounded-md'
+								className='px-4 py-2 bg-blue-600 rounded-md'
 								onClick={() => setSuccess(false)}
 							>
 								OK

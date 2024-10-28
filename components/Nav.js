@@ -7,21 +7,17 @@ import { BsGithub, BsTwitter } from "react-icons/bs";
 const Nav = () => {
 	const [hamburger, setHamburger] = useState(false);
 	return (
-		<div className='h-[10vh] flex items-center justify-between px-[20px] sticky top-0'>
+		<div className='h-[10vh] flex items-center justify-between px-[20px] sticky top-0 bg-white'>
 			<Link href='/'>
-				<h1
-					className='text-xl font-bold text-gray-300
-            '
-				>
+				<h1 className='text-xl font-bold text-black'>
 					NextConnect
 				</h1>
 			</Link>
 			<div className='md:flex items-center justify-between hidden space-x-8'>
-				<Link href='/login' className=' text-gray-400 hover:text-white'>
-					Login
-				</Link>
-				<Link href='/register' className='text-gray-400 hover:text-white'>
-					Register
+				<Link legacyBehavior href='/dashboard' className=' text-gray-400 hover:text-white'>
+				    <a className='px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300'>
+						Dashboard
+					</a>
 				</Link>
 			</div>
 			<div className='md:hidden block'>
@@ -34,16 +30,13 @@ const Nav = () => {
 				<nav className='fixed top-0 right-0 w-1/2 dim h-[100vh] p-6'>
 					<div className='w-full flex items-center justify-end mb-8'>
 						<MdCancel
-							className='text-4xl text-[#C07F00] cursor-pointer hover:text-white'
+							className='text-4xl text-blue-600 cursor-pointer hover:text-white'
 							onClick={() => setHamburger(false)}
 						/>
 					</div>
 					<div className='flex w-full flex-col space-y-8'>
-						<Link href='/login' className='text-white hover:text-[#C07F00]'>
-							Login
-						</Link>
-						<Link href='/register' className='text-white hover:text-[#C07F00]'>
-							Register
+						<Link href='/dashboard' className='text-white hover:text-blue-100'>
+							Dashboard
 						</Link>
 					</div>
 				</nav>

@@ -62,13 +62,13 @@ const login = () => {
 
 						<button
 							type='submit'
-							className='bg-[#FFD95A] p-3 font-medium hover:bg-[#C07F00] hover:text-[#FFF8DE] mb-3 rounded-md'
+							className='bg-blue-600 p-3 font-medium hover:bg-blue-700 mb-3 rounded-md text-white'
 						>
 							SIGN IN
 						</button>
 						<p className='text-center'>
 							Don't have an account?{" "}
-							<Link href='/register' className='text-[#C07F00]'>
+							<Link href='/register' className='text-blue-600'>
 								Register
 							</Link>
 						</p>

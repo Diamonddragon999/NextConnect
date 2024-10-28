@@ -3,6 +3,7 @@ import { account, db, storage } from "./appwrite";
 import { toast } from "react-toastify";
 import { ID, Query } from "appwrite";
 import emailjs from "@emailjs/browser";
+import QRCode from "qrcode"; // Ensure QRCode is imported correctly
 
 //👇🏻 generate random strings as ID
 const generateID = () => Math.random().toString(36).substring(2, 24);
@@ -58,21 +59,20 @@ export const formatDate = (dateString) => {
 
 	return formattedDateWithSuffix;
 };
-//create qr code
-import QRCode from 'qrcode';
 
-async function generateQrCodeBase64(participantID, eventtitle) {
-    const qrData = `${participantID}-${eventtitle}`;
+// Function to generate QR code as a Base64 image
+async function generateQrCodeBase64(passcode, eventtitle) {
+    const qrData = `${passcode}-${eventtitle}`;
     try {
-        const qrCodeBase64 = await QRCode.toDataURL(qrData); // Generates QR in Base64
+        const qrCodeBase64 = await QRCode.toDataURL(qrData);
         return qrCodeBase64;
     } catch (error) {
         console.error("Error generating QR code:", error);
     }
 }
 
-//👇🏻 send email via EmailJS
-export const sendEmail = (
+// Send email via EmailJS with QR code in Base64 format
+export const sendEmail = async (
     name,
     email,
     title,
@@ -85,51 +85,38 @@ export const sendEmail = (
     setSuccess,
     setLoading
 ) => {
-    
-        // Generate QR code based on passcode and eventID
-        /*const qrData = `${passcode}-${title}`;
-        const qrcode = QRCode.toDataURL(qrData); // Generates the QR code in Base64 format*/
-		async function generateQrCodeBase64(participantID, eventTitle) {
-			const qrData = `${participantID}-${eventTitle}`;
-			try {
-				const qrCodeBase64 = await QRCode.toDataURL(qrData); // Generates QR in Base64
-				return qrCodeBase64;
-			} catch (error) {
-				console.error("Error generating QR code:", error);
-			}
-		}
-        // Send email with EmailJS
-        emailjs
-            .send(
-                process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID,
-                process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID,
-                {
-                    name,
-                    email,
-                    title,
-                    time,
-                    date: formatDate(date),
-                    note,
-                    description,
-                    passcode,
-                    qrcode:generateQrCodeBase64(passcode), 
-                    flier_url
-                },
-                process.env.NEXT_PUBLIC_EMAIL_API_KEY
-            )
-            .then(
-                (result) => {
-                    setLoading(false);
-                    setSuccess(true);
-                    //console.log("Email sent successfully!", result);
-                },
-                (error) => {
-                    //console.error("Email send error:", error);
-                    errorMessage(error.text);
-					setSuccess(false);
-					setLoading(false);
-                }
-            );
+    try {
+        setLoading(true);
+        
+        // Await the QR code Base64 result before sending
+        const qrcodeBase64 = await generateQrCodeBase64(passcode, title);
+
+        await emailjs.send(
+            process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID,
+            process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID,
+            {
+                name,
+                email,
+                title,
+                time,
+                date: formatDate(date),
+                note,
+                description,
+                passcode,
+                qrcode: qrcodeBase64, // Attach the Base64 QR code
+                flier_url
+            },
+            process.env.NEXT_PUBLIC_EMAIL_API_KEY
+        );
+        
+        setLoading(false);
+        setSuccess(true);
+    } catch (error) {
+        console.error("Email send error:", error);
+        errorMessage(error.text || "Error sending email.");
+        setSuccess(false);
+        setLoading(false);
+    }
 };
 //👇🏻 converts JSON string to JavaScript objects
 export const parseJSON = (jsonString) => {
@@ -195,21 +182,19 @@ export const checkAuthStatus = async (setUser, setLoading, router) => {
 	}
 };
 
-//👇🏻 Appwrite authenticate and get user's tickets
-export const checkAuthStatusDashboard = async (
-	setUser,
-	setLoading,
-	setEvents,
-	router
-) => {
+export const checkAuthStatusDashboard = async (setUser, setLoading, setEvents, router) => {
 	try {
-		const request = await account.get();
+		const request = await account.get(); // Check if user is logged in
 		getTickets(request.$id, setEvents, setLoading);
 		setUser(request);
+		setLoading(false);
+		return true; // Return true if authenticated
 	} catch (err) {
-		router.push("/");
+		setLoading(false);
+		return false; // Return false if not authenticated
 	}
 };
+
 
 //👇🏻 create a new ticket
 export const createEvent = async (
@@ -308,6 +293,7 @@ export const deleteTicket = async (id) => {
 			);
 		}
 		successMessage("Ticket deleted! 🎉");
+		location.reload();
 	} catch (err) {
 		console.error(err); // Failure
 		errorMessage("Action declined ❌");

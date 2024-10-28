@@ -14,13 +14,6 @@
 .link {
 	word-break: break-all;
 }
-.home {
-	background-image: url("../images/heroimage.jpg");
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: center;
-	background-blend-mode: multiply;
-}
 .register {
 	background-image: url("../images/regimage.jpg");
 	background-repeat: no-repeat;

@@ -45,13 +45,13 @@ const Component = ({ event }) => {
 				<title>{`${event.title} | NextConnect`}</title>
 				<meta
 					name='description'
-					content='An event ticketing system built with NextJS and Firebase'
+					content='An event ticketing system built with NextJS and Appwrite'
 				/>
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 			<main>
-				<div className='h-[45vh] p-3 flex flex-col items-center justify-center bg-[#FFD95A] registergray w-full '>
+				<div className='h-[45vh] p-3 flex flex-col items-center justify-center bg-blue-600 registergray w-full '>
 					<h2 className='text-4xl font-extrabold mb-4 text-center text-white'>
 						{event.title}
 					</h2>
@@ -72,11 +72,11 @@ const Component = ({ event }) => {
 				/>
 
 				<Link href='/dashboard' className='absolute top-6 left-4 py-2 px-4'>
-					<AiTwotoneHome className='text-4xl text-[#FFD95A]' />
+					<AiTwotoneHome className='text-4xl text-transparent' />
 				</Link>
 				{!click && (
 					<BsFillShareFill
-						className=' absolute top-6 right-10 cursor-pointer text-2xl text-[#FFD95A]'
+						className=' absolute top-6 right-10 cursor-pointer text-2xl text-white'
 						onClick={openModal}
 					/>
 				)}
