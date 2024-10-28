@@ -1,3 +1,4 @@
+import { useState } from "react";  // Import useState
 import { account, db, storage } from "./appwrite";
 import { toast } from "react-toastify";
 import { ID, Query } from "appwrite";
@@ -57,46 +58,78 @@ export const formatDate = (dateString) => {
 
 	return formattedDateWithSuffix;
 };
+//create qr code
+import QRCode from 'qrcode';
+
+async function generateQrCodeBase64(participantID, eventtitle) {
+    const qrData = `${participantID}-${eventtitle}`;
+    try {
+        const qrCodeBase64 = await QRCode.toDataURL(qrData); // Generates QR in Base64
+        return qrCodeBase64;
+    } catch (error) {
+        console.error("Error generating QR code:", error);
+    }
+}
+
 //👇🏻 send email via EmailJS
-const sendEmail = (
-	name,
-	email,
-	title,
-	time,
-	date,
-	note,
-	description,
-	passcode,
-	flier_url,
-	setSuccess,
-	setLoading
+export const sendEmail = (
+    name,
+    email,
+    title,
+    time,
+    date,
+    note,
+    description,
+    passcode,
+    flier_url,
+    setSuccess,
+    setLoading
 ) => {
-	emailjs
-		.send(
-			process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID,
-			process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID,
-			{
-				name,
-				email,
-				title,
-				time,
-				date: formatDate(date),
-				note,
-				description,
-				passcode,
-				flier_url,
-			},
-			process.env.NEXT_PUBLIC_EMAIL_API_KEY
-		)
-		.then(
-			(result) => {
-				setLoading(false);
-				setSuccess(true);
-			},
-			(error) => {
-				errorMessage(error.text);
+    
+        // Generate QR code based on passcode and eventID
+        /*const qrData = `${passcode}-${title}`;
+        const qrcode = QRCode.toDataURL(qrData); // Generates the QR code in Base64 format*/
+		async function generateQrCodeBase64(participantID, eventTitle) {
+			const qrData = `${participantID}-${eventTitle}`;
+			try {
+				const qrCodeBase64 = await QRCode.toDataURL(qrData); // Generates QR in Base64
+				return qrCodeBase64;
+			} catch (error) {
+				console.error("Error generating QR code:", error);
 			}
-		);
+		}
+        // Send email with EmailJS
+        emailjs
+            .send(
+                process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID,
+                process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID,
+                {
+                    name,
+                    email,
+                    title,
+                    time,
+                    date: formatDate(date),
+                    note,
+                    description,
+                    passcode,
+                    qrcode:generateQrCodeBase64(passcode), 
+                    flier_url
+                },
+                process.env.NEXT_PUBLIC_EMAIL_API_KEY
+            )
+            .then(
+                (result) => {
+                    setLoading(false);
+                    setSuccess(true);
+                    //console.log("Email sent successfully!", result);
+                },
+                (error) => {
+                    //console.error("Email send error:", error);
+                    errorMessage(error.text);
+					setSuccess(false);
+					setLoading(false);
+                }
+            );
 };
 //👇🏻 converts JSON string to JavaScript objects
 export const parseJSON = (jsonString) => {

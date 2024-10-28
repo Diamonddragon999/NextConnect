@@ -85,6 +85,7 @@ const event = () => {
 								required
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
+								placeholder='Unihack'
 							/>
 
 							<label htmlFor='venue'>Venue</label>
@@ -95,7 +96,7 @@ const event = () => {
 								required
 								value={venue}
 								onChange={(e) => setVenue(e.target.value)}
-								placeholder='Plot Address, Lagos, Nigeria'
+								placeholder='Centrul Regional de Afaceri Timișoara'
 							/>
 
 							<div className='w-full flex justify-between mb-4'>
@@ -155,7 +156,7 @@ const event = () => {
 								<GrAttachment className='mr-2' />
 								{fileName.current?.files[0]?.name
 									? fileName.current?.files[0]?.name
-									: "Attach event flier (optional)"}
+									: "Attach event rules (optional)"}
 								<input
 									type='file'
 									name='file'
