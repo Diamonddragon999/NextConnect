@@ -60,7 +60,7 @@ const event = () => {
 					content='An event ticketing system built with NextJS and Firebase'
 				/>
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<link rel='icon' href='/favicon.ico' />
+				<link rel='icon' href='/images/favicon.ico' />
 			</Head>
 			<main>
 				<AuthNav user={user} />

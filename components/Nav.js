@@ -3,6 +3,7 @@ import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdCancel } from "react-icons/md";
 import { BsGithub, BsTwitter } from "react-icons/bs";
+import Image from "next/image";
 
 const Nav = () => {
 	const [hamburger, setHamburger] = useState(false);
@@ -10,7 +11,14 @@ const Nav = () => {
 		<div className='h-[10vh] flex items-center justify-between px-[20px] sticky top-0 bg-white'>
 			<Link href='/'>
 				<h1 className='text-xl font-bold text-black'>
-					NextConnect
+					<Image
+						src='/images/logo.png' // Replace with your image path
+						alt='Logo'
+						width={80} // Set the width according to your needs
+						height={80} // Set the height according to your needs
+					
+						className='mr-2 ml-2' // Add margin or any other class for styling
+        			  />
 				</h1>
 			</Link>
 			<div className='md:flex items-center justify-between hidden space-x-8'>

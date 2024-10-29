@@ -48,7 +48,7 @@ const Component = ({ event }) => {
 					content='An event ticketing system built with NextJS and Appwrite'
 				/>
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<link rel='icon' href='/favicon.ico' />
+				<link rel='icon' href='/images/favicon.ico' />
 			</Head>
 			<main>
 				<div className='h-[45vh] p-3 flex flex-col items-center justify-center bg-blue-600 registergray w-full '>

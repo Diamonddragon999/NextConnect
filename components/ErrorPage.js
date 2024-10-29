@@ -13,7 +13,7 @@ const ErrorPage = () => {
 					content='An event ticketing system built with NextJS and Firebase'
 				/>
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<link rel='icon' href='/favicon.ico' />
+				<link rel='icon' href='/images/favicon.ico' />
 			</Head>
 			<main className='w-full h-[100vh] flex flex-col space-y-4 items-center justify-center'>
 				<Image src={fourfour} alt='404 page' className='w-[400px] mb-8' />

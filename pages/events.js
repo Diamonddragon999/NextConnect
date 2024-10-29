@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../utils/appwrite.js"; // Adjust the import according to your structure
+import { db } from "../utils/appwrite.js"; // Ajustează importul conform structurii tale
 import Link from "next/link";
-import { useRouter } from "next/router"; // Import useRouter
+import { useRouter } from "next/router"; // Importă useRouter
+import Nav from "../components/Nav";
 
 const EventsPage = () => {
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter(); // Inițializează useRouter
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("date"); // Sort by date or title
+  const [sortOrder, setSortOrder] = useState("date"); // Sortează după dată sau titlu
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // Adjust as needed
+  const itemsPerPage = 6; // Ajustează după cum este necesar
 
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        // Fetch all events (you may want to filter this based on date)
         const response = await db.listDocuments(
           process.env.NEXT_PUBLIC_DB_ID,
           process.env.NEXT_PUBLIC_EVENTS_COLLECTION_ID
@@ -37,7 +37,7 @@ const EventsPage = () => {
   if (loading) return <p>Loading events...</p>;
   if (error) return <p>{error}</p>;
 
-  // Sort events based on user input
+  // Sortează evenimentele pe baza intrării utilizatorului
   const sortedEvents = [...events].sort((a, b) => {
     if (sortOrder === "date") {
       return new Date(a.date) - new Date(b.date);
@@ -46,31 +46,40 @@ const EventsPage = () => {
     }
   });
 
-  // Pagination logic
-  const totalPages = Math.ceil(sortedEvents.length / itemsPerPage);
+  // Filtrare evenimente în funcție de termenul de căutare
+  const filteredEvents = sortedEvents.filter(event =>
+    event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    event.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Logica de paginare
+  const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentEvents = sortedEvents.slice(startIndex, startIndex + itemsPerPage);
+  const currentEvents = filteredEvents.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="container mx-auto p-4">
+      <Nav />
       <h1 className="text-3xl font-semibold text-blue-600 mb-6">Upcoming Events</h1>
-
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search events..."
-          className="border rounded p-2"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <select
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
-          className="border rounded p-2 ml-2"
-        >
-          <option value="date">Sort by Date</option>
-          <option value="title">Sort by Title</option>
-        </select>
+        <div className="mb-4">
+          <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search events..."
+            className="border border-blue-700 rounded p-2 bg-white text-black" // Updated className
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border rounded p-2 ml-2"
+          >
+            <option value="date">Sort by Date</option>
+            <option value="title">Sort by Title</option>
+          </select>
+      </div>
+        
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -82,15 +91,14 @@ const EventsPage = () => {
             </p>
             <p className="mt-2">{event.description}</p>
             {event.imageUrl && <img src={event.imageUrl} alt={event.title} className="mt-2 rounded" />}
-            {/* Update the Link to use documentid */}
-            <Link href={`/register/${event.documentId}/${event.slug}`} className="text-blue-500 hover:underline mt-2 inline-block">
+            <Link href={`/register/${event.$id}/${event.slug}`} className="text-blue-500 hover:underline mt-2 inline-block">
               Reserve Tickets
             </Link>
           </div>
         ))}
       </div>
 
-      {/* Pagination */}
+      {/* Paginare */}
       <div className="flex justify-center mt-6">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -99,7 +107,7 @@ const EventsPage = () => {
         >
           Previous
         </button>
-        <span>{`Page ${currentPage} of ${totalPages}`}</span>
+        <span className="mt-2.5">{`Page ${currentPage} of ${totalPages}`}</span>
         <button
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}

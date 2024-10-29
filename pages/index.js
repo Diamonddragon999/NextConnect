@@ -13,7 +13,7 @@ export default function Home() {
 					content='Join our mission to make a difference through volunteering and community support.'
 				/>
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<link rel='icon' href='/favicon.ico' />
+				<link rel='icon' href='/images/favicon.ico' />
 			</Head>
 			<main className='home bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen'>
 				<Nav />
