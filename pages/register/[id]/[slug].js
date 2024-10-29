@@ -65,7 +65,10 @@ const RegisterPage = ({ event }) => {
 			</Head>
 			<main className='w-full flex items-center justify-between min-h-[100vh] relative'>
 				<div className='md:w-[60%] w-full flex flex-col items-center justify-center min-h-[100vh] px-[30px] py-[30px] relative'>
-					<h2 className='text-2xl font-medium mb-3'>Get your ticket 🎉</h2>
+					{/* Update the heading here */}
+					<h2 className='text-2xl font-medium mb-3'>
+						Get your ticket for ${event.title} 🎉
+					</h2>
 					<form
 						className='w-full flex flex-col justify-center'
 						onSubmit={handleSubmit}
@@ -82,7 +85,7 @@ const RegisterPage = ({ event }) => {
 							/>
 							<FaUserAlt className=' absolute left-4 top-3 text-gray-300' />
 						</div>
-
+	
 						<label htmlFor='email'>Email address</label>
 						<div className='w-full relative'>
 							<input
@@ -131,6 +134,6 @@ const RegisterPage = ({ event }) => {
 				)}
 			</main>
 		</div>
-	);
+	);	
 };
 export default RegisterPage;
