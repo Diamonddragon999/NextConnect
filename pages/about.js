@@ -50,7 +50,7 @@ const About = () => {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <img src="/images/team-member-1.jpg" alt="Team Member" className="h-32 w-32 rounded-full mx-auto" />
+              <img src="/images/team-member-1.png" alt="Team Member" className="h-32 w-32 rounded-full mx-auto" />
               <h3 className="text-xl font-bold mt-4">Cimbru Darius</h3>
               <p className="text-gray-600">Head Developer</p>
             </div>
@@ -60,9 +60,10 @@ const About = () => {
               <p className="text-gray-600">Developer</p>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <img src="/images/team-member-3.jpg" alt="Team Member" className="h-32 w-32 rounded-full mx-auto" />
+              <img src="/images/team-member-3.png" alt="razvan" className="h-32 w-32 rounded-full mx-auto" />
               <h3 className="text-xl font-bold mt-4">Barbu Razvan</h3>
-              <p className="text-gray-600">~Role~</p>
+              <p className="text-gray-600">AI Developer</p>
+              {/*INSERT IMAGES INTO PUBLIC/IMAGES !*/}
             </div>
             <div className="bg-white rounded-lg shadow-lg p-6">
               <img src="/images/team-member-4.jpg" alt="Team Member" className="h-32 w-32 rounded-full mx-auto" />

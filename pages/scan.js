@@ -1,73 +1,135 @@
-// pages/scan.js
-import { useState } from "react";
-import { db } from "./appwrite"; // Adjust this import based on your project structure
-import { ID } from "appwrite";
+import React from "react";
+import dynamic from "next/dynamic";
+import Nav from "../components/Nav";
+import { db } from "../utils/appwrite";
 import { toast } from "react-toastify";
-import QrReader from "react-qr-reader";
+import { Query } from "appwrite";
 
-const ScanPage = () => {
-    const [result, setResult] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
+// Dynamically import QrReader with SSR disabled
+const QrReader = dynamic(() => import("react-qr-scanner"), { ssr: false });
 
-    const handleScan = async (data) => {
-        if (data) {
-            setLoading(true);
-            setMessage("");
+class QRScan extends React.Component {
+  state = {
+    delay: 1000, // 1 second delay
+    result: "No result",
+    passcode: "",
+    title: "",
+    lastScanned: "", // Track last scanned QR code content
+    hasConfirmed: false, // Track if attendance has already been confirmed
+  };
 
-            // Assuming data is in the format 'passcode-eventtitle'
-            const [passcode, eventTitle] = data.split('-');
+  handleScan = (data) => {
+    if (data) {
+      const result = data.text || "No result";
 
-            try {
-                // Fetch the event document by title (or passcode, depending on your setup)
-                const response = await db.listDocuments(
-                    process.env.NEXT_PUBLIC_DB_ID,
-                    process.env.NEXT_PUBLIC_EVENTS_COLLECTION_ID,
-                    [Query.equal("title", eventTitle)] // Change this query as needed
-                );
+      // Only proceed if scanned content has changed
+      if (result !== this.state.lastScanned) {
+        this.setState({ result, lastScanned: result }, () => this.splitResult(result));
+      }
+    }
+  };
 
-                // Check if the event exists and if the passcode is valid
-                if (response.documents.length > 0) {
-                    const eventDoc = response.documents[0];
-                    const attendees = eventDoc.attendees.map(attendee => JSON.parse(attendee));
+  handleError = (err) => {
+    console.error(err);
+    this.setState({ result: "Error scanning QR code." });
+  };
 
-                    // Check if the passcode matches any attendee's ID
-                    const isValid = attendees.some(attendee => attendee.id === passcode);
+  // Split the result into passcode and title if valid, otherwise show error
+  splitResult = (result) => {
+    const parts = result.split("-");
+    if (parts.length === 2) {
+      const [passcode, title] = parts;
+      this.setState({ passcode, title, hasConfirmed: false }, this.checkAttendeePresence);
+    } else {
+      toast.error("Not a valid attendance link!");
+      this.setState({ result: "Not a valid attendance link!", hasConfirmed: false });
+    }
+  };
 
-                    if (isValid) {
-                        setMessage("Valid QR Code! 🎉");
-                    } else {
-                        setMessage("Invalid QR Code ❌");
-                    }
-                } else {
-                    setMessage("Event not found ❌");
-                }
-            } catch (error) {
-                console.error("Error fetching event:", error);
-                setMessage("Error fetching event. Please try again.");
-            }
+  // Check and update attendee presence in Appwrite
+  checkAttendeePresence = async () => {
+    const { passcode, title, hasConfirmed } = this.state;
 
-            setLoading(false);
-        }
-    };
+    // Avoid re-confirmation if already processed
+    if (hasConfirmed) return;
 
-    const handleError = (err) => {
-        console.error(err);
-        setMessage("Error scanning QR Code. Please try again.");
-    };
+    try {
+      // Search for the event by title
+      const searchResult = await db.listDocuments(
+        process.env.NEXT_PUBLIC_DB_ID,
+        process.env.NEXT_PUBLIC_EVENTS_COLLECTION_ID,
+        [Query.equal("title", title)]
+      );
 
+      if (searchResult.total === 0) {
+        toast.error("Event not found!");
+        return;
+      }
+
+      // Assume first matching document as the event
+      const eventDocument = searchResult.documents[0];
+      const attendees = eventDocument.attendees.map(JSON.parse);
+
+      // Find the attendee by passcode
+      const attendeeIndex = attendees.findIndex((attendee) => attendee.id === passcode);
+
+      if (attendeeIndex === -1) {
+        toast.error("Attendee not found!");
+        return;
+      }
+
+      // Check if attendee is already marked as present
+      if (attendees[attendeeIndex].isPresent === "true") {
+        toast.info("Attendance already confirmed for this attendee.");
+        this.setState({ result: "Attendance already confirmed", hasConfirmed: true });
+        return;
+      }
+
+      // Update isPresent to "true" for this attendee
+      attendees[attendeeIndex].isPresent = "true";
+
+      // Update the event document in Appwrite
+      await db.updateDocument(
+        process.env.NEXT_PUBLIC_DB_ID,
+        process.env.NEXT_PUBLIC_EVENTS_COLLECTION_ID,
+        eventDocument.$id,
+        { attendees: attendees.map((attendee) => JSON.stringify(attendee)) }
+      );
+
+      toast.success("Attendance updated successfully!");
+      this.setState({ result: "Attendance confirmed", hasConfirmed: true }); // Set confirmation flag
+    } catch (error) {
+      console.error("Error updating attendance:", error);
+      toast.error("Failed to update attendance");
+    }
+  };
+
+  render() {
     return (
-        <div>
-            <h1>Scan QR Code</h1>
-            {loading && <p>Loading...</p>}
-            <QrReader
-                onError={handleError}
-                onScan={handleScan}
-                style={{ width: '100%' }}
-            />
-            {message && <p>{message}</p>}
-        </div>
-    );
-};
+      <div className='home bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen'>
+        <Nav />
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 to-teal-50 p-4">
+          <h1 className="text-3xl font-semibold text-blue-600 mb-6">Scan QR Code</h1>
 
-export default ScanPage;
+          <div className="bg-white shadow-md rounded-lg overflow-hidden border border-blue-300 mb-4 p-4">
+            <QrReader
+              delay={this.state.delay}
+              onError={this.handleError}
+              onScan={this.handleScan}
+              style={{ width: "600px", height: "500px" }}
+            />
+          </div>
+
+          <div className="w-full max-w-md text-center bg-white border border-blue-200 shadow-md rounded-lg p-6 space-y-4">
+            <div>
+              <p className="text-sm font-medium text-gray-500 uppercase">Scanned Result</p>
+              <p className="text-lg font-semibold text-gray-700">{this.state.result}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default QRScan;

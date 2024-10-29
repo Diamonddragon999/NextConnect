@@ -121,7 +121,7 @@ const RegisterPage = ({ event }) => {
 								Check your email for your ticket and event information.
 							</p>
 							<button
-								className='px-4 py-2 bg-blue-600 rounded-md'
+								className='px-4 py-2 bg-blue-600 rounded-md text-white'
 								onClick={() => setSuccess(false)}
 							>
 								OK

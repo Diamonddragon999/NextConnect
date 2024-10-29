@@ -20,9 +20,6 @@ const Footer = () => {
 					<Link legacyBehavior href='/about'>
 						<a className='text-sm hover:underline'>About Us</a>
 					</Link>
-					<Link legacyBehavior href='/join'>
-						<a className='text-sm hover:underline'>Join Us</a>
-					</Link>
 					<Link legacyBehavior href='/events'>
 						<a className='text-sm hover:underline'>Events</a>
 					</Link>

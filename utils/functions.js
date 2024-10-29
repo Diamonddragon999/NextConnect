@@ -322,7 +322,7 @@ export const registerAttendee = async (
         // Check if the email already exists in attendees
         const isRegistered = doc.attendees.some((item) => JSON.parse(item).email === email);
 
-        if (!isRegistered) {
+        if (!isRegistered) { 
             // If not registered, add the new attendee
             await db.updateDocument(
                 process.env.NEXT_PUBLIC_DB_ID,
@@ -331,7 +331,7 @@ export const registerAttendee = async (
                 {
                     attendees: [
                         ...doc.attendees,
-                        JSON.stringify({ name, email, id: attendeeID }),
+                        JSON.stringify({ name, email, id: attendeeID, isPresent:"false"}),
                     ],
                 }
             );

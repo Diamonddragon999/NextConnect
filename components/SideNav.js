@@ -6,6 +6,7 @@ import { ImExit } from "react-icons/im";
 import { IoIosCreate } from "react-icons/io";
 import { useRouter } from "next/router";
 import { logOut } from "../utils/functions";
+import { FaQrcode } from "react-icons/fa";
 
 const SideNav = () => {
 	const router = useRouter();
@@ -25,7 +26,13 @@ const SideNav = () => {
 				<IoIosCreate className='mr-2' size={22} />
 				New
 			</Link>
-
+			<Link
+				href='/scan'
+				className='py-2 px-6 hover:bg-blue-600  hover:text-[#F1F6F9] w-full rounded mb-6 flex items-start'
+			>
+				<FaQrcode className='mr-2' size={22} />
+				Scan QR
+			</Link>
 			<p
 				className='py-2 px-6 hover:bg-blue-600 hover:text-[#F1F6F9] w-full rounded mb-6 flex items-start'
 				onClick={() => logOut(router)}
