@@ -3,7 +3,7 @@ import React from "react";
 const Loading = ({ title }) => {
 	return (
 		<div className='w-full h-[100vh] dim absolute top-0 left-0 flex items-center justify-center p-4  z-40'>
-			<div className='md:w-[500px] w-full bg-white h-[300px] flex items-center justify-center flex-col rounded-md shadow-[#FFD95A] shadow-md space-y-4 relative'>
+			<div className='md:w-[500px] w-full bg-white h-[300px] flex items-center justify-center flex-col rounded-md shadown-blue-100 shadow-md space-y-4 relative'>
 				<h3 className='text-lg text-center'>{title}</h3>
 
 				<button

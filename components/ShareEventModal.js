@@ -12,8 +12,8 @@ const ShareEventModal = ({ event, closeModal }) => {
 
 	return (
 		<div className='w-full h-[100vh] dim absolute top-0 left-0 flex items-center justify-center p-4  z-40'>
-			<div className='md:w-2/3 w-full bg-white h-[300px] flex items-center justify-center flex-col rounded-md shadow-[#FFD95A] shadow-md space-y-4 relative'>
-				<h2 className='text-xl font-bold text-[#b59a42]'>Share event </h2>
+			<div className='md:w-2/3 w-full bg-white h-[300px] flex items-center justify-center flex-col rounded-md shadown-blue-100 shadow-md space-y-4 relative'>
+				<h2 className='text-xl font-bold text-blue-600'>Share event </h2>
 				<div className='w-max-content flex md:flex-row flex-col items-center space-x-3 p-3'>
 					<div className='w-full border-[1px] md:mb-0 mb-4 p-2 rounded-md'>
 						<p className='text-gray-400 text-center link'>
@@ -34,7 +34,7 @@ const ShareEventModal = ({ event, closeModal }) => {
 				</div>
 
 				<MdCancel
-					className='text-4xl text-blue-600 cursor-pointer hover:text-[#b59a42] top-3 absolute right-4'
+					className='text-4xl text-blue-600 cursor-pointer hover:text-blue-600 top-3 absolute right-4'
 					onClick={closeModal}
 				/>
 			</div>
