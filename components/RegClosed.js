@@ -14,15 +14,15 @@ const RegClosed = ({ event }) => {
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link rel='icon' href='/images/favicon.ico' />
 			</Head>
-			<main className='w-full h-[100vh] flex flex-col items-center justify-center bg-orange-50'>
+			<main className='w-full h-[100vh] flex flex-col items-center justify-center bg-blue-100'>
 				<h2 className='text-2xl font-bold mb-6'>Registration closed! 😪</h2>
 				<p>
-					<Link href='/' className='text-orange-500'>
+					<Link href='/' className='text-blue-500'>
 						{event.title}
 					</Link>{" "}
 				</p>
 				<p className='opacity-50 text-md text-center'>
-					&copy; Copyright {new Date().getFullYear()}{" "}
+					&copy;NextConnect {new Date().getFullYear()}{" "}
 				</p>
 			</main>
 		</div>

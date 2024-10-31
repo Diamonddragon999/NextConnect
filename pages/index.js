@@ -17,21 +17,22 @@ export default function Home() {
 			</Head>
 			<main className='home bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen'>
 				<Nav />
-				<section className='h-screen flex flex-col justify-center items-center text-center bg-gradient-to-r from-blue-500 to-teal-500 text-white p-6'>
-					<h1 className='text-5xl md:text-6xl font-bold mb-4'>
-						Connect, Volunteer, Impact
-					</h1>
-					<p className='text-xl md:text-2xl max-w-2xl mx-auto mb-8'>
-						NextConnect brings passionate people together to make a lasting difference.
-						Join us in empowering communities, protecting our planet, and building a brighter future.
-					</p>
-					<a
-						href='/dashboard'
-						className='mt-4 px-10 py-4 bg-white text-black font-semibold rounded-full shadow-lg hover:bg-blue-300 transition-all duration-300'
-					>
-						Create your event
-					</a>
-				</section>
+				<section className='h-dvh flex flex-col justify-center items-center text-center bg-gradient-to-r from-blue-600 to-purple-700 text-white p-6 animated-gradient'>
+	<h1 className='text-5xl md:text-6xl font-bold mb-4'>
+		Connect, Volunteer, Impact
+	</h1>
+	<p className='text-xl md:text-2xl max-w-2xl mx-auto mb-8'>
+		NextConnect brings passionate people together to make a lasting difference.
+		Join us in empowering communities, protecting our planet, and building a brighter future.
+	</p>
+	<a
+		href='/dashboard'
+		className='mt-4 px-10 py-4 bg-white text-black font-semibold rounded-full shadow-lg hover:bg-blue-300 transition-all duration-300'
+	>
+		Create your event
+	</a>
+</section>
+
 
 				{/* Why We’re Different */}
 				<section className='py-20 bg-white'>
@@ -109,11 +110,11 @@ export default function Home() {
 				</section>
 
 				{/* Impact Section */}
-				<section className='py-20 bg-gradient-to-r from-teal-500 via-blue-600 to-teal-500 text-white'>
+				<section className='py-20 bg-gradient-to-r from-blue-500 to-purple-600 text-white'>
 					<div className='container mx-auto px-6 md:px-12 text-center'>
 						<h2 className='text-3xl md:text-4xl font-extrabold mb-4'>Our Impact</h2>
 						<p className='text-lg md:text-xl max-w-2xl mx-auto mb-10'>
-							With over 500 volunteers dedicating thousands of hours, NextConnect has brought hope, support, and growth to communities across the globe.
+						With the dedication of countless volunteers contributing thousands of hours, NextConnect will bring hope, support, and growth to communities across the globe.
 						</p>
 						<a
 							href='/about'

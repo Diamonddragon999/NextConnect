@@ -10,8 +10,7 @@ const Footer = () => {
 				<div className='text-center md:text-left'>
 					<h2 className='text-2xl font-bold mb-2'>NextConnect Volunteers</h2>
 					<p className='text-sm opacity-75 max-w-xs'>
-						Empowering communities and creating a better world through
-						volunteering and kindness.
+						Take your volunteering event to the Next level.
 					</p>
 				</div>
 
@@ -39,7 +38,7 @@ const Footer = () => {
 						<BsFacebook className='text-2xl' />
 					</a>
 					<a
-						href='https://instagram.com'
+						href='https://www.instagram.com/nextc_onnect/'
 						target='_blank'
 						rel='noopener noreferrer'
 						className='text-gray-800 hover:text-gray-600'

@@ -56,6 +56,23 @@ const EventsPage = () => {
   const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentEvents = filteredEvents.slice(startIndex, startIndex + itemsPerPage);
+  
+  const getEventStatus = (eventDate, disableRegistration) => {
+		const today = new Date();
+		const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+		const eventDateObj = new Date(eventDate);
+
+
+		if(!disableRegistration) {
+			if (eventDateObj <= todayWithoutTime) {
+				return "ONGOING"; 
+			} else {
+				return "UPCOMING"; 
+			}
+		} else {
+			return "FINISHED"; // GATA
+		}
+	};
 
   return (
     <div className="container mx-auto p-4">
@@ -89,6 +106,12 @@ const EventsPage = () => {
             <p className="text-gray-600">
               Date: {new Date(event.date).toLocaleDateString()} at {event.time}
             </p>
+            <p className={`mt-2 font-bold ${
+            getEventStatus(event.date, event.disableRegistration) === "ONGOING" ? "text-green-600" :
+            getEventStatus(event.date, event.disableRegistration) === "UPCOMING" ? "text-blue-600" : "text-gray-600"
+            }`}>
+            {getEventStatus(event.date, event.disableRegistration)}
+            </p>
             <p className="mt-2">{event.description}</p>
             {event.imageUrl && <img src={event.imageUrl} alt={event.title} className="mt-2 rounded" />}
             <Link href={`/register/${event.$id}/${event.slug}`} className="text-blue-500 hover:underline mt-2 inline-block">
@@ -117,7 +140,11 @@ const EventsPage = () => {
         </button>
       </div>
     </div>
+  
+
   );
 };
+
+
 
 export default EventsPage;

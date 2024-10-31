@@ -54,3 +54,21 @@ td {
 .dim {
 	background-color: rgba(0, 0, 0, 0.8);
 }
+
+@keyframes gradient-animation {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.animated-gradient {
+	background: linear-gradient(270deg, #1e3a8a, #9333ea, #6366f1, #10b981);
+	background-size: 800% 800%;
+	animation: gradient-animation 20s ease infinite;
+}

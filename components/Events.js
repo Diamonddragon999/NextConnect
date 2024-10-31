@@ -1,14 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from "next/router";
-import { BsFillShareFill } from "react-icons/bs";
-import ShareEventModal from "./ShareEventModal";
 import { deleteTicket, formatDate } from "../utils/functions";
 
 const Events = ({ events }) => {
 	const router = useRouter();
+
 	const handleRoute = (slug, id) =>
 		router.push({ pathname: `/events/${id}/${slug}` });
+
+	// Helper function to determine event status
+	const getEventStatus = (eventDate, disableRegistration) => {
+		const today = new Date();
+		const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+		const eventDateObj = new Date(eventDate);
+
+
+		if(!disableRegistration) {
+			if (eventDateObj <= todayWithoutTime) {
+				return "ONGOING"; 
+			} else {
+				return "UPCOMING"; 
+			}
+		} else {
+			return "FINISHED"; // GATA
+		}
+	};
 
 	return (
 		<div className='w-full flex flex-wrap items-center justify-center'>
@@ -27,9 +44,17 @@ const Events = ({ events }) => {
 								? `${event.attendees.length} person(s) registered`
 								: `No attendee yet`}
 						</p>
-						<p className='opacity-50'>Time: {event.time}</p>
+
 						<p className='opacity-50'>Date: {formatDate(event.date)}</p>
 						<p className='opacity-50'>Venue: {event.venue}</p>
+						
+						{/* Event Status */}
+						<p className={`mt-2 font-bold ${
+							getEventStatus(event.date, event.disableRegistration) === "ONGOING" ? "text-green-600" :
+							getEventStatus(event.date, event.disableRegistration) === "UPCOMING" ? "text-blue-600" : "text-gray-600"
+						}`}>
+							{getEventStatus(event.date, event.disableRegistration)}
+						</p>
 					</div>
 
 					<div className='w-full py-6 bg-blue-600 rounded-b-2xl flex items-center px-4 justify-between'>

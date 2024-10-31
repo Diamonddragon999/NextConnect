@@ -25,7 +25,7 @@ const Dashboard = () => {
 		authenticateUser();
 	}, [authenticateUser]);
 
-	if (loading) return <Loading title='Authenticating...' />;
+	//if (loading) return <Loading title='Authenticating...' />;
 
 	return (
 		<div>
@@ -33,7 +33,7 @@ const Dashboard = () => {
 				<title>Dashboard | NextConnect</title>
 				<meta
 					name='description'
-					content='An event ticketing system built with NextJS and Appwrite'
+					content='Take your volunteering event to the Next level with NextConnect'
 				/>
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link rel='icon' href='/images/favicon.ico' />

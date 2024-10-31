@@ -78,6 +78,7 @@ const Component = ({ event }) => {
 					disableRegModal={disableRegModal}
 					setDisableRegModal={setDisableRegModal}
 				/>
+				
 
 				<Link href='/dashboard' className='absolute top-6 left-4 py-2 px-4'>
 					<AiTwotoneHome className='text-4xl text-transparent' />

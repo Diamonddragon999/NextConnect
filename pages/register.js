@@ -7,21 +7,22 @@ import { AiTwotoneLock, AiFillCheckCircle } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { signUp } from "../utils/functions";
 
-const register = () => {
+const Register = () => {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [cpassword, setCPassword] = useState("");
 	const router = useRouter();
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (password === cpassword) {
-			signUp(name, email, password, router);
+			await signUp(name, email, password, router);
 			setName("");
 			setEmail("");
 			setPassword("");
 			setCPassword("");
+			alert("Registration successful! Please check your email to verify your account.");
 		}
 	};
 
@@ -29,106 +30,99 @@ const register = () => {
 		<div>
 			<Head>
 				<title>Register | NextConnect</title>
-				<meta
-					name='description'
-					content='An event ticketing system built with NextJS and Firebase'
-				/>
-				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<link rel='icon' href='/images/favicon.ico' />
+				<meta name="description" content="An event ticketing system built with NextJS and Appwrite" />
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<link rel="icon" href="/images/favicon.ico" />
 			</Head>
-			<main className='w-full flex items-center justify-between min-h-[100vh]'>
-				<div className='md:w-[60%] w-full flex flex-col items-center justify-center min-h-[100vh] px-[30px] py-[30px] relative'>
-					<Link href='/'>
-						<h2 className='text-2xl font-medium mb-6'>Create an account</h2>
+			<main className="w-full flex items-center justify-between min-h-[100vh]">
+				<div className="md:w-[60%] w-full flex flex-col items-center justify-center min-h-[100vh] px-[30px] py-[30px] relative">
+					<Link href="/">
+						<h2 className="text-2xl font-medium mb-6">Create an account</h2>
 					</Link>
-					<form
-						className='w-full flex flex-col justify-center'
-						onSubmit={handleSubmit}
-					>
-						<label htmlFor='name'>Name</label>
-						<div className='w-full relative'>
+					<form className="w-full flex flex-col justify-center" onSubmit={handleSubmit}>
+						<label htmlFor="name">Name</label>
+						<div className="w-full relative">
 							<input
-								type='text'
-								name='name'
-								className='border px-10 py-2 mb-3 rounded-md w-full'
+								type="text"
+								name="name"
+								className="border px-10 py-2 mb-3 rounded-md w-full"
 								required
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 							/>
-							<BsPersonHeart className=' absolute left-4 top-3 text-gray-300 text-xl' />
+							<BsPersonHeart className="absolute left-4 top-3 text-gray-300 text-xl" />
 						</div>
-						<label htmlFor='email'>Email address</label>
-						<div className='w-full relative'>
+						<label htmlFor="email">Email address</label>
+						<div className="w-full relative">
 							<input
-								type='email'
-								name='email'
-								className='border px-10 py-2 mb-3 rounded-md w-full'
+								type="email"
+								name="email"
+								className="border px-10 py-2 mb-3 rounded-md w-full"
 								required
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 							/>
-							<HiMail className=' absolute left-4 top-3 text-gray-300 text-xl' />
+							<HiMail className="absolute left-4 top-3 text-gray-300 text-xl" />
 						</div>
-						<label htmlFor='password'>Password</label>
-						<div className='w-full relative'>
+						<label htmlFor="password">Password</label>
+						<div className="w-full relative">
 							<input
-								type='password'
-								name='password'
-								className='border px-10 py-2 mb-4 rounded-md w-full'
+								type="password"
+								name="password"
+								className="border px-10 py-2 mb-4 rounded-md w-full"
 								minLength={8}
 								required
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 							/>
-							<AiTwotoneLock className=' absolute left-4 top-3 text-gray-300 text-xl' />
+							<AiTwotoneLock className="absolute left-4 top-3 text-gray-300 text-xl" />
 							{password === cpassword && cpassword !== "" && (
-								<AiFillCheckCircle className=' absolute right-4 top-3 text-green-500 text-xl' />
+								<AiFillCheckCircle className="absolute right-4 top-3 text-green-500 text-xl" />
 							)}
 						</div>
-						<label htmlFor='cpassword'>Confirm Password</label>
-						<div className='w-full relative'>
+						<label htmlFor="cpassword">Confirm Password</label>
+						<div className="w-full relative">
 							<input
-								type='password'
-								name='cpassword'
-								className='border px-10 py-2 mb-4 rounded-md w-full'
+								type="password"
+								name="cpassword"
+								className="border px-10 py-2 mb-4 rounded-md w-full"
 								required
 								minLength={8}
 								value={cpassword}
 								onChange={(e) => setCPassword(e.target.value)}
 							/>
-							<AiTwotoneLock className=' absolute left-4 top-3 text-gray-300 text-xl' />
+							<AiTwotoneLock className="absolute left-4 top-3 text-gray-300 text-xl" />
 							{password === cpassword && cpassword !== "" && (
-								<AiFillCheckCircle className=' absolute right-4 top-3 text-green-500 text-xl' />
+								<AiFillCheckCircle className="absolute right-4 top-3 text-green-500 text-xl" />
 							)}
 						</div>
 						{password !== cpassword && (
-							<p className='text-red-500 mb-2'>Password does not match</p>
+							<p className="text-red-500 mb-2">Password does not match</p>
 						)}
 						<button
-							type='submit'
-							className='bg-blue-600 p-3 font-medium hover:bg-blue-700 text-white mb-3 rounded-md'
+							type="submit"
+							className="bg-blue-600 p-3 font-medium hover:bg-blue-700 text-white mb-3 rounded-md"
 						>
 							REGISTER
 						</button>
-						<p className='text-center'>
+						<p className="text-center">
 							Already have an account?{" "}
-							<Link href='/login' className='text-blue-600'>
+							<Link href="/login" className="text-blue-600">
 								Sign in
 							</Link>
 						</p>
 					</form>
-					<div className='absolute bottom-5 left-5'>
-						<p className='opacity-50 text-sm'>
-							<Link href='/'>NextConnect</Link> &copy; Copyright{" "}
+					<div className="absolute bottom-5 left-5">
+						<p className="opacity-50 text-sm">
+							<Link href="/">NextConnect</Link> &copy; Copyright{" "}
 							{new Date().getFullYear()}{" "}
 						</p>
 					</div>
 				</div>
-				<div className='register md:w-[40%] h-[100vh] relative'>
-				</div>
+				<div className="register md:w-[40%] h-[100vh] relative"></div>
 			</main>
 		</div>
 	);
 };
 
-export default register;
+export default Register;

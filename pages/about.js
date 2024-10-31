@@ -11,7 +11,7 @@ const About = () => {
       <section className="w-full bg-gradient-to-r from-teal-500 via-blue-600 to-teal-500 text-white py-20 text-center px-6">
         <h1 className="text-5xl font-bold">About Us</h1>
         <p className="mt-4 text-xl">
-          Empowering customers to easily reserve tickets for unforgettable experiences.
+          Empowering volunteers to easily manage their events for unforgettable experiences.
         </p>
       </section>
 
@@ -83,7 +83,7 @@ const About = () => {
             <p className="text-right mt-4 text-blue-700 font-semibold">– Alex Johnson</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="text-gray-700 italic">"Booking events has never been easier."</p>
+            <p className="text-gray-700 italic">"Changing the world has never been easier."</p>
             <p className="text-right mt-4 text-blue-700 font-semibold">– Maria Gomez</p>
           </div>
           {/* Add more testimonials */}
@@ -114,7 +114,7 @@ const About = () => {
           <img src="/images/tailwind-logo.svg" alt="Tailwind CSS" className="h-12 filter invert mx-auto mb-3" />
           <h3 className="text-xl font-semibold">Tailwind CSS</h3>
         </a>
-        <p className="text-sm mt-2">A utility-first CSS framework that allows us to design responsive, fast-loading, and modern interfaces directly within the HTML structure.</p>
+        <p className="text-sm mt-2">An utility-first CSS framework that allows us to design responsive, fast-loading, and modern interfaces directly within the HTML structure.</p>
       </div>
 
       
