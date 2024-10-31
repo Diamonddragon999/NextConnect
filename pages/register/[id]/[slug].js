@@ -9,6 +9,9 @@ import RegClosed from "../../../components/RegClosed";
 import ErrorPage from "../../../components/ErrorPage";
 import Loading from "../../../components/Loading";
 import { db } from "../../../utils/appwrite";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { parsePhoneNumber } from 'libphonenumber-js';
 
 export async function getServerSideProps(context) {
 	let event = {};
@@ -33,14 +36,30 @@ const RegisterPage = ({ event }) => {
 	const [loading, setLoading] = useState(false);
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
+	const [phone, setPhone] = useState("");  // Phone state for react-phone-input-2
+	const [phoneError, setPhoneError] = useState(""); // Phone validation error
 	const { query } = useRouter();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		registerAttendee(name, email, query.id, setSuccess, setLoading);
-		setEmail("");
-		setName("");
+
+		// Validate phone number before proceeding
+		try {
+			const parsedNumber = parsePhoneNumber(`+${phone}`); // Ensure the phone number is parsed with country code
+			if (parsedNumber.isValid()) {
+				setPhoneError(""); // Clear error if valid
+				registerAttendee(name, email, phone, query.id, setSuccess, setLoading); // Pass phone in the registration function
+				setEmail("");
+				setName("");
+				setPhone(""); // Reset phone
+			} else {
+				setPhoneError("Please enter a valid phone number.");
+			}
+		} catch (error) {
+			setPhoneError("Please enter a valid phone number.");
+		}
 	};
+
 	if (loading) {
 		return <Loading title='Generating your ticket🤞🏼' />;
 	}
@@ -65,9 +84,8 @@ const RegisterPage = ({ event }) => {
 			</Head>
 			<main className='w-full flex items-center justify-between min-h-[100vh] relative'>
 				<div className='md:w-[60%] w-full flex flex-col items-center justify-center min-h-[100vh] px-[30px] py-[30px] relative'>
-					{/* Update the heading here */}
 					<h2 className='text-2xl font-medium mb-3'>
-						Get your ticket for ${event.title} 🎉
+						Get your ticket for {event.title} 🎉
 					</h2>
 					<form
 						className='w-full flex flex-col justify-center'
@@ -85,7 +103,7 @@ const RegisterPage = ({ event }) => {
 							/>
 							<FaUserAlt className=' absolute left-4 top-3 text-gray-300' />
 						</div>
-	
+
 						<label htmlFor='email'>Email address</label>
 						<div className='w-full relative'>
 							<input
@@ -98,6 +116,21 @@ const RegisterPage = ({ event }) => {
 							/>
 							<HiMail className=' absolute left-4 top-3 text-gray-300 text-xl' />
 						</div>
+
+						<label htmlFor='phone'>Phone Number</label>
+						<div className='w-full relative mb-3'>
+							<PhoneInput
+								country={'ro'}
+								value={phone}
+								onChange={(phone) => setPhone(phone)}
+								inputClass="border rounded-md w-full"
+								inputStyle={{ width: '100%', paddingLeft: '50px', height: '38px' }}
+								buttonStyle={{ left: '5px' }}
+								required
+							/>
+						</div>
+						{phoneError && <p className="text-red-500 mb-3">{phoneError}</p>}
+
 						<button
 							type='submit'
 							className='bg-blue-600 p-3 font-medium hover:bg-blue-600 hover:text-[#FFF8DE] text-white mb-3 rounded-md'
@@ -134,6 +167,7 @@ const RegisterPage = ({ event }) => {
 				)}
 			</main>
 		</div>
-	);	
+	);
 };
+
 export default RegisterPage;

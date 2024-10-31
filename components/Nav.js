@@ -16,7 +16,6 @@ const Nav = () => {
 						alt='Logo'
 						width={80} // Set the width according to your needs
 						height={80} // Set the height according to your needs
-					
 						className='mr-2 ml-2' // Add margin or any other class for styling
         			  />
 				</h1>

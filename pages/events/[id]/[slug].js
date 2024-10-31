@@ -55,6 +55,12 @@ const Component = ({ event }) => {
 					<h2 className='text-4xl font-extrabold mb-4 text-center text-white'>
 						{event.title}
 					</h2>
+					<button
+							onClick={() => router.push(`/edit/${event.$id}`)}
+							className="p-2 bg-blue-600 text-white rounded mt-4"
+					>
+						Edit Event
+					</button>
 					{event.attendees.length > 0 && (
 						<p className='text-xl font-extrabold mb-6 text-white'>
 							Total Attendees:{" "}
@@ -62,6 +68,8 @@ const Component = ({ event }) => {
 						</p>
 					)}
 				</div>
+				
+
 				<Attendees
 					attendees={event.attendees}
 					id={router.query.id}

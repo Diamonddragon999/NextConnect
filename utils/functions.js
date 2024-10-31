@@ -67,8 +67,27 @@ async function generateQrCodeBase64(passcode, eventtitle) {
         const qrCodeBase64 = await QRCode.toDataURL(qrData);
         return qrCodeBase64;
     } catch (error) {
-        console.error("Error generating QR code:", error);
+        // console.error("Error generating QR code:", error);
     }
+}
+
+//format phoneNumber
+export function formatPhoneNumber(input) {
+    try {
+        // Remove any non-digit characters from the input
+        const cleaned = input.replace(/\D/g, '');
+
+        // Extract the country code and the rest of the number
+        const countryCode = cleaned.substring(0, 2); // First two digits
+        const number = cleaned.substring(2); // Remaining digits
+
+        // Format the phone number
+        const formatted = `+${countryCode} ${number.substring(0, 3)} ${number.substring(3, 6)} ${number.substring(6)}`;
+
+        return formatted;
+    } catch(err) {
+        return "N/A";
+    };
 }
 
 // Send email via EmailJS with QR code in Base64 format
@@ -123,7 +142,7 @@ export const parseJSON = (jsonString) => {
 	try {
 		return JSON.parse(jsonString);
 	} catch (error) {
-		console.error("Error parsing JSON:", error);
+		// console.error("Error parsing JSON:", error);
 		return null;
 	}
 };
@@ -154,7 +173,7 @@ export const logIn = async (email, setEmail, password, setPassword, router) => {
 		setPassword("");
 		router.push("/dashboard");
 	} catch (err) {
-		console.error(err);
+		//console.error(err);
 		errorMessage(err.message || "Invalid credentials ❌");
 	}
 };
@@ -166,7 +185,7 @@ export const logOut = async (router) => {
 		router.push("/");
 		successMessage("See ya later 🎉");
 	} catch (err) {
-		console.error(err);
+		//console.error(err);
 		errorMessage("Encountered an error 😪");
 	}
 };
@@ -198,60 +217,76 @@ export const checkAuthStatusDashboard = async (setUser, setLoading, setEvents, r
 
 //👇🏻 create a new ticket
 export const createEvent = async (
-	id,
-	title,
-	date,
-	time,
-	venue,
-	description,
-	note,
-	flier,
-	router
+    userId,
+    title,
+    date,
+    time,
+    venue,
+    description,
+    note,
+    flier,
+    router
 ) => {
-	const createDocument = async (flier_url = "https://google.com") => {
-		try {
-			const response = await db.createDocument(
-				process.env.NEXT_PUBLIC_DB_ID,
-				process.env.NEXT_PUBLIC_EVENTS_COLLECTION_ID,
-				ID.unique(),
-				{
-					user_id: id,
-					title,
-					date,
-					time,
-					venue,
-					description,
-					note,
-					slug: createSlug(title),
-					attendees: [],
-					disableRegistration: false,
-					flier_url,
-				}
-			);
-			successMessage("Ticket created 🎉");
-			router.push("/dashboard");
-		} catch (error) {
-			console.error("DB ERROR >>", error);
-			errorMessage("Encountered an error ❌");
-		}
-	};
+    // Create the document in Appwrite
+    const createDocument = async (flier_url = "https://google.com") => {
+        try {
+            const response = await db.createDocument(
+                process.env.NEXT_PUBLIC_DB_ID,
+                process.env.NEXT_PUBLIC_EVENTS_COLLECTION_ID,
+                ID.unique(),
+                {
+                    user_id: userId,
+                    title,
+                    date: date.toISOString().split('T')[0], // Only keep date part
+                    time,
+                    venue,
+                    description,
+                    note,
+                    slug: createSlug(title),
+                    attendees: [],
+                    disableRegistration: false,
+                    flier_url,
+                }
+            );
+            successMessage("Event created successfully 🎉");
+            router.push("/dashboard");
+        } catch (error) {
+            //console.error("Error creating event:", error);
+            errorMessage("Error creating event ❌");
+        }
+    };
 
-	if (flier !== null) {
-		try {
-			const response = await storage.createFile(
-				process.env.NEXT_PUBLIC_BUCKET_ID,
-				ID.unique(),
-				flier
-			);
-			const flier_url = `https://cloud.appwrite.io/v1/storage/buckets/${process.env.NEXT_PUBLIC_BUCKET_ID}/files/${response.$id}/view?project=${process.env.NEXT_PUBLIC_PROJECT_ID}&mode=admin`;
-			await createDocument(flier_url);
-		} catch (error) {
-			console.error("STORAGE ERR >>>", error);
-			errorMessage("Encountered an error saving the flier❌");
-		}
-	} else {
-		await createDocument();
-	}
+    // Handle file upload if `flier` is provided
+    if (flier) {
+        try {
+            const response = await storage.createFile(
+                process.env.NEXT_PUBLIC_BUCKET_ID,
+                ID.unique(),
+                flier
+            );
+            const flier_url = `https://cloud.appwrite.io/v1/storage/buckets/${process.env.NEXT_PUBLIC_BUCKET_ID}/files/${response.$id}/view?project=${process.env.NEXT_PUBLIC_PROJECT_ID}&mode=admin`;
+            await createDocument(flier_url);
+        } catch (error) {
+            errorMessage("Failed to upload event rules ❌");
+        }
+    } else {
+        await createDocument();
+    }
+};
+
+export const updateEvent = async (eventID, updatedData, router) => {
+    try {
+        await db.updateDocument(
+            process.env.NEXT_PUBLIC_DB_ID,
+            process.env.NEXT_PUBLIC_EVENTS_COLLECTION_ID,
+            eventID,
+            updatedData
+        );
+        successMessage("Event updated successfully!");
+        router.push("/dashboard"); // Redirect to the dashboard after update
+    } catch (error) {
+        errorMessage("Error updating event:", error);
+    }
 };
 
 //👇🏻 get user's tickets
@@ -295,13 +330,16 @@ export const deleteTicket = async (id) => {
 		successMessage("Ticket deleted! 🎉");
 		location.reload();
 	} catch (err) {
-		console.error(err); // Failure
+		//console.error(err); // Failure
 		errorMessage("Action declined ❌");
 	}
 };
+
+//Register a new attendee
 export const registerAttendee = async (
     name,
     email,
+    phoneNumber,
     documentId,
     setSuccess,
     setLoading
@@ -331,7 +369,7 @@ export const registerAttendee = async (
                 {
                     attendees: [
                         ...doc.attendees,
-                        JSON.stringify({ name, email, id: attendeeID, isPresent:"false"}),
+                        JSON.stringify({ name, email, phoneNumber, id: attendeeID, isPresent:"false"}),
                     ],
                 }
             );
@@ -359,11 +397,49 @@ export const registerAttendee = async (
             setLoading(false); // Stop loading if already registered
         }
     } catch (err) {
-        console.error(err); // Log error
+        //console.error(err); // Log error
         errorMessage("Encountered an error!");
         setLoading(false); // Stop loading on error
     }
 };
+
+export const sendtoGforms = async (documentId) => {
+    try {
+        // Retrieve the document from the database
+        const document = await db.getDocument(
+            process.env.NEXT_PUBLIC_DB_ID,
+            process.env.NEXT_PUBLIC_EVENTS_COLLECTION_ID,
+            documentId
+        );
+
+        // Check if the document exists and has an attendees array
+        if (document && document.attendees) {
+            // Prepare the attendees array for sending
+            const attendees = document.attendees;
+
+            // Send the attendees array as JSON to the specified URL
+            const response = await fetch('https://hook.eu2.make.com/zg2fsbrviuqb7f6ae0ld6gmbekg7ixh4', {
+                method: 'POST', // Use POST method
+                headers: {
+                    'Content-Type': 'application/json' // Specify JSON content type
+                },
+                body:JSON.stringify({"eventTitle":document.title, attendees}) // Send attendees as JSON
+            });
+
+            // Handle the response if necessary
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const responseData = await response.json();
+            //console.log('Response from server:', responseData); // Optional logging
+        } else {
+            throw new Error('Document does not exist or has no attendees.');
+        }
+    } catch (error) {
+        errorMessage("Encountered an error sending to the GForms: " + error.message);
+    }
+};
+
 
 //👇🏻 disable an event registration
 export const disableRegistration = async (documentId) => {
@@ -376,6 +452,7 @@ export const disableRegistration = async (documentId) => {
 				disableRegistration: true,
 			}
 		);
+        sendtoGforms(documentId);
 		successMessage("New registration disabled! 🎉");
 	} catch (err) {
 		console.error(err); // Failure

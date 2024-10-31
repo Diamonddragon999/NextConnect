@@ -4,6 +4,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { useTable } from "react-table";
 import DisableReg from "./DisableReg";
 import { parseJSON } from "../utils/functions";
+import { formatPhoneNumber } from "../utils/functions";
 
 const Attendees = ({
 	attendees,
@@ -17,7 +18,7 @@ const Attendees = ({
 	const attendeesArray = attendees.map(parseJSON);
 	const [attendeeState, setAttendees] = useState(attendeesArray);
 
-	// Define columns with custom rendering for isPresent
+	// Define columns with custom rendering for isPresent and phoneNumber
 	const data = React.useMemo(() => attendeeState, [attendeeState]);
 	const columns = React.useMemo(
 		() => [
@@ -34,6 +35,17 @@ const Attendees = ({
 				accessor: "email",
 			},
 			{
+				Header: "Phone Number",
+				accessor: "phoneNumber",
+				Cell: ({ value }) => (
+					<div className="flex justify-center items-center">
+						{
+						formatPhoneNumber(value)
+						}
+					</div>
+				),
+			},
+			{
 				Header: "Is Present?",
 				accessor: "isPresent",
 				Cell: ({ value }) => (
@@ -45,7 +57,7 @@ const Attendees = ({
 						)}
 					</div>
 				),
-			}
+			},
 		],
 		[]
 	);
@@ -74,7 +86,7 @@ const Attendees = ({
 						className={`p-4 ${click && "hidden"} text-white rounded-md bg-blue-600`}
 						onClick={() => setDisableRegModal(true)}
 					>
-						Disable Registration
+						End Event
 					</button>
 				)}
 			</div>
